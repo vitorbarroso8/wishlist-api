@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,9 +16,9 @@ public class Wishlist {
     @Id
     private String id;
 
-    private String user_id;
+    private String userId;
 
-    private String product_id;
+    private List<Product> products;
 
-    private String create_date;
+    private String createDate;
 }
