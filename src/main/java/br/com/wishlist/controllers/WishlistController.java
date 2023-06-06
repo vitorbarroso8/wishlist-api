@@ -2,6 +2,7 @@ package br.com.wishlist.controllers;
 
 import br.com.wishlist.documents.Product;
 import br.com.wishlist.documents.Wishlist;
+import br.com.wishlist.services.ProductService;
 import br.com.wishlist.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +11,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "/wishlist/{userId}")
+@RequestMapping(path = "/wishlist")
 public class WishlistController {
     String userId = "1";
     int MAX_PRODUCT_IN_WISHLIST = 20;
     @Autowired
     private WishlistService wishlistService;
+    @Autowired
+    private ProductService productService;
 
+    //Salva um produto
+    @PostMapping(path ="/product/new")
+    public ResponseEntity<Product> saveProduct(@RequestBody Product product){
+        return ResponseEntity.ok(productService.addProduct(product));
+    }
+
+    //Retorna a wishlist do cliente
     @GetMapping
     public ResponseEntity<Wishlist> getWishlist(){
         if(this.wishlistService.getWishlistByUserId(userId).isEmpty()){
@@ -25,6 +35,7 @@ public class WishlistController {
         return ResponseEntity.ok(this.wishlistService.getWishlistByUserId(userId).get());
     }
 
+    //Adiciona o produto a wishlist do cliente, se não tiver 20 produtos
     @PostMapping(name = "/product")
     public ResponseEntity<Wishlist> addProduct(@RequestBody Product product){
         Optional<Wishlist> optional = wishlistService.getWishlistByUserId(userId);
@@ -41,6 +52,7 @@ public class WishlistController {
         return ResponseEntity.ok(wishlist);
     }
 
+    //Deleta o produto da lista pelo id do produto
     @DeleteMapping(path = "/product/{id}")
     public ResponseEntity<Wishlist> removeProduct(@PathVariable(name = "id") String id){
         Optional<Wishlist> optional = wishlistService.getWishlistByUserId(userId);
@@ -54,6 +66,7 @@ public class WishlistController {
         return ResponseEntity.ok(optional.get());
     }
 
+    //Lista o produto pelo id do produto
     @GetMapping(path = "/product/{id}")
     public ResponseEntity<Product> searchByProductId(@PathVariable(name = "id") String id){
         Optional<Wishlist> optional = wishlistService.getWishlistByUserId(userId);

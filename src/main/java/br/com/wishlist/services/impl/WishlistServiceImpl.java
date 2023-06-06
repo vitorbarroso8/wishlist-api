@@ -6,7 +6,6 @@ import br.com.wishlist.services.WishlistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,4 +29,5 @@ public class WishlistServiceImpl implements WishlistService {
     public Wishlist addWishlist(Wishlist wishlist) {
         return this.wishlistRepository.save(wishlist);
     }
+
 }
